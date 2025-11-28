@@ -37,6 +37,9 @@ data/image:
 5. Run the `logistic_regression.ipynb` notebook. This is our implementation of a multi-class logistic regression using the one vs. all approach. Might take few minutes to complete.
 6. (Optional) Run the `sklearn-logistic.ipynb` notebook if you want to compare the performance and metrics to Scikit Learn implementation on same data.
 
+### Similarity Anaylsis
+Running the `similarity_analysis.ipynb` notebook shows the intra-class and inter-class similarity analysis and the outlier detection.
+
 ### Extra
 There is also the `image_generation.ipynb` notebook which is not a part of this standard pipeline. It is used to generate synthetic image. 
 
