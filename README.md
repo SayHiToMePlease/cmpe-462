@@ -1,5 +1,9 @@
 ### We have a data pipeline of notebooks, that can be run to obtain the usable tabular data from raw images, and train the models with it.
 
+### Dependencies
+- If you have the `uv` package manager, running `uv sync` at root directory is enough to install the necessary libraries.
+- Otherwise, you need to manually install `matplotlib, numpy, opencv-python, polars, scikit-learn, seaborn` with your preferred package manager.
+
 ## Steps
 1. Place the image data (generated ones and photographs) into data/image folder like this:
 ```
