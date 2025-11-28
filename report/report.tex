@@ -264,32 +264,31 @@ With the help of this splitting, we can test an interesting case in which a mode
 \subsection*{Future Extraction}
 We have \textbf{72} features in total, 64 of which is the grayscale representation of the image. The other 8 is related to colors, physical attributes, and semantic information.
 
-\subsubsection*{Visual Features}
+\subsubsection*{Grayscale Histogram (8 $\times$ 8 = 64 features)}
+We convert each image into a 8$\times$8 grayscale image and give the value of each pixel as a feature to our model. This helps distinguishing between objects with similar colors but different surface textures (e.g., the smooth surface of a tomato vs. the rougher texture of a carrot).
 
-\subsubsection*{Grayscale Histogram (64 bins)}
-While color is a primary feature for fruit recognition, it is sensitive to lighting conditions. By converting images to grayscale and computing a 64-bin histogram, we capture the \textit{global intensity distribution} and \textit{texture complexity} of the object independent of its hue.
-\begin{itemize}
-    \item This helps distinguish between objects with similar colors but different surface textures (e.g., the smooth surface of a tomato vs. the rougher texture of a carrot).
-    \item It effectively separates dark objects from light objects regardless of their specific color channel values.
-\end{itemize}
+\textbf{How did we extract:} We made use of OpenCV to convert the image into grayscale and resize it to 8$\times$8.
 
 \subsubsection*{Color Statistics (RGB Mean and Standard Deviation)}
-Color is the most intuitive discriminator for this specific dataset (e.g., Bananas are yellow, Carrots are orange, Cucumbers are green).
+Color is the most intuitive discriminator for this specific dataset.
 \begin{itemize}
-    \item \textbf{Mean:} Captures the dominant chromaticity of the object.
-    \item \textbf{Standard Deviation:} Captures the color variance. This is crucial for distinguishing between objects with uniform color (like a tomato) and objects with color variation, spots, or complex shading (like a cucumber or a ripening banana).
+    \item \textbf{Mean:} Captures the dominant color of the object. This is crucial to separate the objects with different colors such as banana and mandarin.
+    \item \textbf{Standard Deviation:} Captures the color variance. Even though we are not sure, we think that standard deviation might help the model learn some texture specific relation. (On the surface of a cucumber, there might be frequent dark spots.)
 \end{itemize}
+\textbf{How did we extract:} We made use of OpenCV to read the color value of each pixel in an image. Afterwards, it was just simple math to calculate the features.
 
 \subsubsection*{Physical Attributes (Weight and Size)}
-Visual features generally lack scale information—a zoomed-in mandarin might look like a zoomed-out orange. Adding physical constraints helps resolve these scale ambiguities.
+Weight and size are important features since these help the model to learn, hopefully, the geometric attributes of an object. 
 \begin{itemize}
-    \item These features define the geometric and physical boundaries of the classes (e.g., a cucumber is significantly longer/larger than a mandarin; a watermelon is heavier than a tomato).
+    \item These features define the geometric and physical boundaries of the classes (A cucumber is significantly longer/larger than a mandarin).
 \end{itemize}
+\textbf{How did we extract:} This might be the trickiest one to extract. We used Gaussian distributions with different mean and variance values for each class to generate weights and sizes. For example, the average weight of a banana is 120 g, with a variance of 16 g² in the code. These values were derived by asking to ChatGPT since there are multiple answers on the Internet, but we want one.
 
 \subsubsection*{Semantic Features (Text Description)}
-Visual and physical data cannot capture abstract or tactile properties. The text description (e.g., ``sour,'' ``soft,'' ``tropical'') introduces \textit{semantic knowledge} into the classifier.
+We have selected a set of words to define different classes. However, we paid attention not to make them easily separable. For example, if an object can have the word ``tropical'' in its text feature, then, another one also can.
 \begin{itemize}
-    \item These descriptions allow the model to learn associations based on human perception (taste and feel) rather than just pixel values, improving robustness where visual boundaries are blurred.
+    \item We aim to make the model learn the relation between a \textit{bag of words} and a class. With combination of words, it is feasible to separate the objects that share some common words.
 \end{itemize}
+\textbf{How did we extract:} We created a vocabulary in which we aggregated all unique descriptors (e.g., colors, textures, origins) across all classes. We then represented the text description of each sample as a binary feature vector, where each dimension corresponds to the presence (1) or absence (0) of a specific word from this vocabulary. This resulted in a representation whcih encodes the attributes defined in our vocabulary.
 
 \end{document}
