@@ -350,7 +350,7 @@ Figures \ref{fig:loss_image} and  \ref{fig:roc_image} display the training dynam
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/plots/image/loss.png}
+    \includegraphics[width=0.8\textwidth]{figures/plots/image/loss.png}
     \caption{Training and Validation Loss during the optimization process.}
     \label{fig:loss_image}
 \end{figure}
@@ -360,6 +360,187 @@ Figures \ref{fig:loss_image} and  \ref{fig:roc_image} display the training dynam
     \includegraphics[width=0.8\textwidth]{figures/plots/image/roc.png}
     \caption{ROC Curves evaluating model performance on the Test Set (Photographs).}
     \label{fig:roc_image}
+\end{figure}
+
+\subsection*{Only Numeric}
+For this experiment, we utilized only the physical attributes (Weight and Size). These features represent a low-dimensional input space compared to images or text.
+
+\subsubsection*{Performance Metrics}
+As shown in Table \ref{tab:numeric_metrics}, the model achieves moderate accuracy. The performance is consistent across Training, Validation, and Test sets. Unlike the image modality, the physical attributes generalize well to real-world data, likely because weight and size attributes are generated in the same way. However, overall results show that these two features alone are not enough for a good classification.
+
+\begin{table}[H]
+    \centering
+    \caption{Performance Metrics for Numeric-Only Classifier}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Metric} & \textbf{Training} & \textbf{Validation} & \textbf{Test (Photos)} \\
+        \midrule
+        Accuracy   & 60.01\% & 62.40\% & 60.80\% \\
+        Precision  & 0.5245  & 0.5865  & 0.6614  \\
+        Recall     & 0.5585  & 0.5831  & 0.5858  \\
+        F1 Score   & 0.5054  & 0.5293  & 0.5161  \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:numeric_metrics}
+\end{table}
+
+\subsubsection*{Class-wise AUC Analysis}
+The AUC scores (Table \ref{tab:numeric_auc}) indicate that certain classes are easily separable by looking at their physical attributes.
+\begin{itemize}
+    \item \textbf{Carrot and Banana} have high AUC scores ($>0.90$), suggesting their length-to-weight ratios are unique.
+    \item \textbf{Cucumber} proved difficult on the test set, possibly due to high variance in real-world cucumber sizes.
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \caption{Class-wise AUC Scores (One-vs-All) - Numeric Only}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Class} & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Test AUC} \\
+        \midrule
+        Banana   & 0.9087 & 0.9203 & 0.9060 \\
+        Carrot   & 0.9289 & 0.9212 & 0.9249 \\
+        Cucumber & 0.8391 & 0.8452 & 0.7768 \\
+        Mandarin & 0.8919 & 0.8825 & 0.9492 \\
+        Tomato   & 0.8442 & 0.8593 & 0.8556 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:numeric_auc}
+\end{table}
+
+\subsubsection*{Training Visualizations}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/numeric/loss.png}
+    \caption{Training and Validation Loss (Numeric-Only).}
+    \label{fig:loss_numeric}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/numeric/roc.png}
+    \caption{ROC Curves on Test Set (Numeric-Only).}
+    \label{fig:roc_numeric}
+\end{figure}
+
+\subsection*{Only Text}
+This classifier was trained using binary feature vectors derived from the vocabulary of text descriptions.
+
+\subsubsection*{Performance Metrics}
+These features (Table \ref{tab:text_metrics}) outperformed both image and numeric ones, achieving approximately 80\% accuracy on the validation set. Also, it maintained approximately 77\% accuracy on the test set, showing nice generalization.
+
+\begin{table}[H]
+    \centering
+    \caption{Performance Metrics for Text-Only Classifier}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Metric} & \textbf{Training} & \textbf{Validation} & \textbf{Test (Photos)} \\
+        \midrule
+        Accuracy   & 79.78\% & 80.00\% & 77.41\% \\
+        Precision  & 0.8170  & 0.8146  & 0.8133  \\
+        Recall     & 0.7828  & 0.7853  & 0.7537  \\
+        F1 Score   & 0.7831  & 0.7875  & 0.7553  \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:text_metrics}
+\end{table}
+
+\subsubsection*{Class-wise AUC Analysis}
+AUC scores were consistently high ($>0.95$) for all classes across all splits. This confirms that the semantic descriptions provided in the dataset are highly discriminative even though there is randomization and multiple words.
+
+\begin{table}[H]
+    \centering
+    \caption{Class-wise AUC Scores (One-vs-All) - Text Only}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Class} & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Test AUC} \\
+        \midrule
+        Banana   & 0.9727 & 0.9692 & 0.9614 \\
+        Carrot   & 0.9671 & 0.9651 & 0.9547 \\
+        Cucumber & 0.9759 & 0.9764 & 0.9749 \\
+        Mandarin & 0.9621 & 0.9652 & 0.9504 \\
+        Tomato   & 0.9934 & 0.9947 & 0.9859 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:text_auc}
+\end{table}
+
+\subsubsection*{Training Visualizations}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/text/loss.png}
+    \caption{Training and Validation Loss (Text-Only).}
+    \label{fig:loss_text}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/text/roc.png}
+    \caption{ROC Curves on Test Set (Text-Only).}
+    \label{fig:roc_text}
+\end{figure}
+
+\subsection*{Fused}
+Finally, we trained the classifier on the concatenated feature vector, combining Image, Numeric, and Text features.
+
+\subsubsection*{Performance Metrics}
+The fused model achieved the best overall performance. As shown in Table \ref{tab:fused_metrics}, it reached near-perfect accuracy on the training and validation data. On the real-world test set, accuracy remained high at \textbf{88.37\%}, outperforming the single-feature baselines (Image: 32\%, Numeric: 60\%, Text: 77\%).
+
+\begin{table}[H]
+    \centering
+    \caption{Performance Metrics for Fused Data Classifier}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Metric} & \textbf{Training} & \textbf{Validation} & \textbf{Test (Photos)} \\
+        \midrule
+        Accuracy   & 98.47\% & 98.04\% & 88.37\% \\
+        Precision  & 0.9845  & 0.9795  & 0.8996  \\
+        Recall     & 0.9837  & 0.9792  & 0.8705  \\
+        F1 Score   & 0.9840  & 0.9793  & 0.8654  \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:fused_metrics}
+\end{table}
+
+\subsubsection*{Class-wise AUC Analysis}
+The AUC scores are also well, with nearly all classes achieving $>0.98$ on the test set, indicating the model classifies reliably.
+
+\begin{table}[H]
+    \centering
+    \caption{Class-wise AUC Scores (One-vs-All) - Fused Data}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Class} & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Test AUC} \\
+        \midrule
+        Banana   & 0.9990 & 0.9989 & 0.9919 \\
+        Carrot   & 0.9954 & 0.9903 & 0.9854 \\
+        Cucumber & 0.9993 & 0.9989 & 0.9799 \\
+        Mandarin & 0.9991 & 0.9996 & 0.9984 \\
+        Tomato   & 0.9997 & 0.9994 & 0.9968 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:fused_auc}
+\end{table}
+
+\subsubsection*{Training Visualizations}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/fused/loss.png}
+    \caption{Training and Validation Loss (Fused Data).}
+    \label{fig:loss_fused}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/fused/roc.png}
+    \caption{ROC Curves on Test Set (Fused Data).}
+    \label{fig:roc_fused}
 \end{figure}
 
 \end{document}
