@@ -1,8 +1,0 @@
-Classifier,Best Hyperparameters,Training Time (sec),Test Accuracy
-Logistic Regression,"{'clf__C': 1, 'clf__solver': 'liblinear'}",8.0565,0.9003
-Log. Reg. (Non-Linear),{'clf__C': 0.1},9.5813,0.7708
-SVM (Linear),{'clf__C': 0.1},0.5366,0.9103
-SVM (Kernel RBF),"{'clf__C': 1, 'clf__gamma': 'scale'}",1.6303,0.8405
-k-NN,"{'clf__n_neighbors': 9, 'clf__weights': 'distance'}",0.6283,0.6146
-Naive Bayes,{'clf__var_smoothing': 1e-08},0.2184,0.8571
-Random Forest,"{'clf__max_depth': 20, 'clf__n_estimators': 100}",5.7214,0.7342
